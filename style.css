@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.marker {
+    background-image: url('assets/img_marcador.png');
+    background-size: cover;
+    width: 20px;
+    height: 31px;
+    cursor: pointer;
+}   
+.mapboxgl-popup {
+    max-width: 350px !important;
+}
+
+    .mapboxgl-popup-content {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+}
+
+img {
+  width: 320px;
+}

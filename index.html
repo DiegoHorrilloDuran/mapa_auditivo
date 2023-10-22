@@ -5,41 +5,9 @@
     <title>Mapa sonoro</title>
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .marker {
-            background-image: url('assets/img_marcador.png');
-            background-size: cover;
-            width: 20px;
-            height: 31px;
-            cursor: pointer;
-        }   
-        .mapboxgl-popup {
-            max-width: 350px !important;
-        }
-
-            .mapboxgl-popup-content {
-            text-align: center;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        img {
-          width: 320px;
-        }
-    </style>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -49,11 +17,31 @@
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGllZ29ob3JyaWxsb2QiLCJhIjoiY2xranlxd2hoMDV6MDNlbnM2ZmFydjRidSJ9.xkqmAQY_sZTZhgWC91go1A';
 
+// Set bounds.
+const bounds = [
+[-7.7,36.71], // Southwest coordinates
+[-5.81,37.79] // Northeast coordinates
+];
+
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/outdoors-v12',
   center: [-6.802986271762013, 37.27843511374113],
-  zoom: 8.90
+  zoom: 9.4,
+  maxBounds: bounds // Set the map's geographical boundaries.
+});
+
+map.on('load', () => {
+  map.addSource('donnana', {
+    'type': 'raster',
+    'url': 'mapbox://diegohorrillod.2dccre6e'
+  });
+  
+  map.addLayer({
+    'id': 'custom_map',
+    'source': 'donnana',
+    'type': 'raster'
+  });
 });
 
 // Marcadores para el mapa
@@ -69,7 +57,9 @@ const geojson = {
       properties: {
         title: 'Embalse del Chanza y Estación de bombeo Bocachanza',
         description: 'A escasos metros de la confluencia de los río Chanza y Guadiana, en la frontera entre España y Portugal, se sitúan la estación de bombeo Bocachanza y la presa del Chanza. Estas infraestructuras constituyen la cabecera del sistema de explotación Chanza-Piedras que satisface más del 65% de las necesidades hídricas de la provincia (agua de consumo al en el litoral, área metropolitana, industrias del Polo Químico y regadíos del Andévalo y litoral occidental) y del trasvase de aguas para riego entre la Demarcación Hidrográfica del Tinto, Odiel y Piedras y la Demarcación Hidrográfica del Guadalquivir. La estación de bombeo Bocachanza tiene capacidad para bombear hasta 75hm3 de aguas del Guadiana hasta el embalse del Chanza para posteriormente distribuirlas a través del sistema de explotación.',
-        media: '01_BombeoBocachanza'
+        media: '01_BombeoBocachanza',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -81,7 +71,9 @@ const geojson = {
       properties: {
         title: 'Canal del Granado',
         description: 'Las aguas del embalse del Chanza, con capacidad máxima de 340hm3, son conducidas a través del sistema Andévalo-Chanza-Piedras por un complejo entramado de infraestructuras hídricas como el Canal del Granado o el Túnel de San Silvestre que unen los embalses del Andévalo (634hm3), Piedras (60hm³) y Los Machos (12hm3). Desde estos se distribuyen a través de canalizaciones hasta los puntos de demanda. Esta abarca todo el riego (principalmente cítricos, aguacates y frutos rojos en intensivo) y abastecimiento de la población y establecimientos turísticos de la franja costera occidental, desde Ayamonte hasta el área metropolitana de la capital de Huelva. Además, suministran agua a las industrias en el Polo Químico Industrial de Huelva.',
-        media: '02_CanalGranado'
+        media: '02_CanalGranado',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -93,7 +85,9 @@ const geojson = {
       properties: {
         title: 'Embalse del Piedras',
         description: 'Aguas abajo del Embalse del Piedras se extiende un mar de plantaciones intensivas de cítricos, frutos rojos y aguacates regados con aguas del sistema Andévalo-Chanza-Piedras. Estos cultivos han proliferado en la costa occidental onubense en las últimas décadas hasta alcanzar las 45.00 hectáreas. El Plan Hidrológico del Tinto, Odiel y Piedras 2022-2027 contempla que esta cifra pueda a duplicarse en los próximos años. La aguda sequía ha obligado en 2023 a una reducción del 25% en la dotación para regadíos. A esta demanda de agua para riego hay que sumarle la elevada demanda estacional para los núcleos turísticos de la costa onubense como Ayamonte, Isla Cristina o Punta Umbría.',
-        media: '03_EmbalsePiedras'
+        media: '03_EmbalsePiedras',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -105,7 +99,9 @@ const geojson = {
       properties: {
         title: 'Prácticas mafiosas y violencia empresarial en los asentamientos de temporerxs migrantes',
         description: 'Cada campaña agrícola, son miles de trabajadores migrantes los que recurren al chabolismo. El martes 3 de marzo de 2020 se produjo un asalto en el asentamiento del Cementerio de Lepe por parte de matones que aporrearon y amenazaron a los trabajadores migrantes que residían en este lugar. Existen en solo en Lepe en torno a 25 campamentos de chabolas. Muchos de estos se ven empujados a esta situación ante la negativa a alquilarles una vivienda en los pueblos cercanos a las plantaciones. Otros se ven empujados a estas por su situación irregular. Únicamente existen dos albergues para temporeros en la provincia de Huelva: el del Albergue-Residencia de Tariquejo gestionado por los empresarios de los frutos rojos y el de la Asociación de Nuevos Ciudadanos para la Interculturalidad (Asnuci) en Lepe, que se construyó gracias un crowdfunding que recaudó en torno a 60.000 euros.',
-        media: '04_AmenazasAsentamientoLepe'
+        media: '04_AmenazasAsentamientoLepe',
+        audioFormat: 'wav',
+        imageFormat: 'mp4'
       }
     },
     {
@@ -117,7 +113,9 @@ const geojson = {
       properties: {
         title: 'Presa de Alcolea',
         description: 'La presa de Alcolea es una infraestructura clave dentro de los planes de ampliación de regadío en el entorno de Doñana. Actualmente se encuntra al 21% de su construcción después de que en 2017 se paralizaran las obras por un conflicto en torno a los sobrecostes del proyecto. Esta coyuntura favoreció la reapertura del debate sobre la autorización ambiental de la obra. La mala calidad del agua que sería embalsada, con altos contenidos de metales pesados procedentes de los lixiviados ácidos de las escombreras mineras de la cuenca del Odiel, ponen en duda la viabilidad ambiental y económica del proyecto. La presión de los regantes  para reanudar la construcción de la presa ha ido acompañada por el intento de desacreditar el consenso científico respeto a la contaminación del agua. Así, en 2021 la consultora holandesa DELTARES emitió un informe favorable a la construcción de la presa. Tras el señalamiento de las deficiencias científicas del informe por la Fundación Nueva Cultura del Agua, la consultora rectificó las conclusiones de su informe concluyendo que no hay información suficiente para poder afirmar que el agua de la presa de Alcolea sea adecuado para cualquier tipo de uso.',
-        media: '05_PresaAlcoleaJornadasTintoOdiel'
+        media: '05_PresaAlcoleaJornadasTintoOdiel',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -129,7 +127,9 @@ const geojson = {
       properties: {
         title: 'Jornaleras de Huelva en Lucha',
         description: 'Formado en 2018, Jornaleras de Huelva en Lucha (JHL) es un colectivo autoorganizado integrado por trabajadoras agrícolas de Huelva. JHL organiza su actividad en torno a tres ejes: feminismo, ecologismo y antiracismo. La actividad del colectivo ha sido fundamental para la visibilización de las condiciones laborales de las trabajadoras del campo y en relación a los conflictos del agua en el entorno de Doñana sobresale por el análisis que pone de manifiesto los vínculos estructurales entre el extractivismo hídrico y la explotación del trabajo a través de la producción institucionalizada de una fuerza de trabajo feminizada y racializada. La organización de base de las trabajadoras agrícolas surge en un contexto de marginación de las luchas de las trabajadoras migrantes por parte de las principales centrales sindicales y apunta a la necesaria integración de la justicia ambiental y social.  ',
-        media: '06_JornalerasDeHuelvaEnLucha'
+        media: '06_JornalerasDeHuelvaEnLucha',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -141,7 +141,9 @@ const geojson = {
       properties: {
         title: 'Río Odiel en Sotiel Coronada, junto a la bocamina de Sotiel',
         description: 'La mina de Sotiel fue reabierta en 2015 y en la actualidad es propiedad de la australiana Sandfire MATSA. La actividad minera histórica y actual han causado un desastre ambiental a gran escala, comprometiendo toda la cuenca de los ríos Tinto y Odiel. Las minas abandonadas esparcidas por toda la Faja Pirítica onubense suponen un gran foco de contaminación consecuencia de los drenajes ácidos de mina. Se trata de agua altamente ácida rica en metales pesados que se forma a través de la reacción química del agua superficial y del agua subterránea poco profunda con los minerales sulfurosos expuestos por el legado de la actividad minera. A pesar de su modesto caudal, estos dos ríos contribuyen con el 37% del zinc y el 15% del cobre aportado por todos los ríos del mundo a los mares y océanos del planeta. En buena parte de sus cauces tan sólo pueden sobrevivir organismos extremófilos y el grado de contaminación compromete la disponibilidad de agua para abastecimiento humano y regadío.',
-        media: '07_RíoOdielSotielCoronada'
+        media: '07_RíoOdielSotielCoronada',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -153,7 +155,9 @@ const geojson = {
       properties: {
         title: 'Recrecimiento de las balsas de relaves en la mina de Riotinto',
         description: 'La concentración media actual de cobre que se extrae en la corta de Cerro Colorado es del 0,4%. Este mineral es procesado y concentrado hasta una concentración de en torno al 23%. Esto conlleva la generación de una gran cantidad de lodos mineros que se almacenan en las balsas de lodos mineros (Gossan, Cobre y Aguzadera) que ocupan en torno a 580 hectáreas. Desde organizaciones como Ecologistas en Acción se ha denunciado el altísimo riesgo de rotura de estas balsas que acumulan más de 200 millones de toneladas de lodos tóxicos. Una hipotética rotura de las mismas causaría un desastre ambiental de magnitudes superiores a la catástrofe de Aznalcóllar (1998), llegando los lodos a la desembocadura del río Odiel en el Atlántico a través de la Ría de Huelva, en las proximidades del Parque Nacional de Doñana. Durante el mes de julio de 2023 han comenzado los trabajos de recrecimientos de estas balsas para aumentar su vida útil añadiendo 161 millones de toneladas adicionales.',
-        media: '08_BalsasRelavesRioTinto'
+        media: '08_BalsasRelavesRioTinto',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -165,7 +169,9 @@ const geojson = {
       properties: {
         title: 'Voladura en la corta de Cerro Colorado',
         description: 'Actualmente se asiste a un momento de auge en la minería de la Faja Pirítica Ibérica. Son cinco las minas en explotación y tantas otras se encuentras en proceso de reapertura o fase de exploración. Las minas de Riotinto, de nuevo en explotación desde 2015 por la multinacional Atalaya Mining, son claro ejemplo del creciente interés en la obtención de materias críticas para la transición energética, como el cobre o el zinc. La concentración media actual de cobre de estas minas, que comenzaron a explotarse en torno a hace 5.000 años, es del 0,4%. Este mineral es procesado y concentrado hasta una concentración de en torno al 23%. Posteriormente este concentrado se transporta hasta el puerto de Huelva donde es enviado a fundiciones de Asia. Desde la Administración autonómica se está apostando fuertemente por el impulso de la minería como uno de los pilares del “desarrollo sostenible” de Andalucía.',
-        media: '09_VoladuraMinaRiotinto'
+        media: '09_VoladuraMinaRiotinto',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -177,7 +183,9 @@ const geojson = {
       properties: {
         title: 'Nacimiento del río Tinto',
         description: 'El río Tinto brota del subsuelo de la Faja Pirítica Ibérica y atraviesa gran parte de la provincia de Huelva desde su nacimiento, junto a la mina Peña del Hierro hasta su desembocadura donde confluye con el río Odiel antes de verter sus aguas ácidas al océano Atlántico. Se trata de un río donde confluyen distintas problemáticas socioambientales de gran magnitud en sus escasos 102km. Desde su cabecera con el “boom” minero que se experimenta en la Faja Pirítica ibérica a razón de la obtención de materias primas críticas para la transición energética y el vertedero de residuos peligrosos de Nerva. A su curso medio, atravesado por grandes extensiones de eucaliptos, introducidas por el franquismo para alimentar la fábrica de pasta de papel de ENCE. Hasta su estuario, uno de los más contaminados del mundo,  donde confluyen agroindustria e industria química. Es además el lugar desde donde en 1492 partió Cristóbal Colón hacia “las Indias”.',
-        media: '10_NacimientoRíoTinto'
+        media: '10_NacimientoRíoTinto',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -189,7 +197,9 @@ const geojson = {
       properties: {
         title: 'Anillo Hídrico de Huelva junto al puente del Tinto (Moguer)',
         description: 'La “ley del trasvase” (Ley 10/2018, de 5 de diciembre) autoriza la transferencia de 19,99 hm³ desde la Demarcación Hidrográfica de los ríos Tinto, Odiel y Piedras a la Demarcación Hidrográfica del Guadalquivir. Este trasvase tiene como objetivo principal contribuir a garantizar el abastecimiento de los municipios del Condado de Huelva, mejorar la garantía del riego, la recuperación de los acuíferos de la zona y el equilibrio hídrico del entorno y especialmente del Parque Nacional de Doñana. Los agricultores del condado de Huelva han condicionado el cierre de los pozos no autorizados a la llegada de agua superficial. La reciente polémica en torno a la ampliación de los derechos de riego promovida por la Junta de Andalucía pone de manifiesto los limites de la soluciones basadas en la transferencia de recursos de agua superficial. La negativa de la mayoría de los agricultores almonteños a la ampliación de la superficie regable refleja la creciente conflictividad generada por el control de un recurso escaso. ',
-        media: '11_TuberíaAnilloHídrico'
+        media: '11_TuberíaAnilloHídrico',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -201,7 +211,9 @@ const geojson = {
       properties: {
         title: 'Balsas de fosfoyesos sobre lo que fueron las marismas del río Tinto',
         description: 'Las balsas de fosfoyesos son ingentes acumulaciones de residuos procedentes de la fabricación de ácido fosfórico que se asientan sobre lo que fueron las marismas del río Tinto. Desde 1968 hasta 2010 Fertiberia acumuló y apiló en estas balsas hasta 120 millones de toneladas de fosfoyesos sobre 1200 hectáreas en marismas. A la vez se depositaron otros residuos de la industria química (ácidos débiles, cenizas de pirita, etc.), escombros, o residuos radiactivos contaminados con el isótopo ‘Cesio 137’ procedentes del accidente de Acerinox (1998). En 2009, la Audiencia Nacional, acordó la prohibición de apertura de nuevas balsas y el cese definitivo de los vertidos para el 31 de diciembre de 2010. En la actualidad Fertiberia pretende acometer un proyecto de restauración (enterramiento) de los fosfoyesos. Este proyecto ha sido ampliamente cuestionado por los científicos integrantes del comité de expertos, ecologistas e incluso la abogacía del Estado.',
-        media: '12_Fosfoyesos'
+        media: '12_Fosfoyesos',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -213,7 +225,9 @@ const geojson = {
       properties: {
         title: 'Extracción ilegal de agua en el entorno de Doñana',
         description: 'Durante el verano de 2023 la organización Rebelión por el Clima procedió al sabotaje de este pozo ilegal. Días después, el pozo volvía a estar plenamente operativo. Según estimaciones  del World Wide Fund for Nature (WWF) del año 2023, en el entorno de Doñana se regaban aproximadamente 4700 hectáreas con agua extraída ilegalmente. Según la Confederación Hidrográfica del Guadalquivir (CHG), responsable de la autorización de derechos de agua, en el año 2023 tenía abiertos procesos de ejecución subsidiaria para el cierre de 407 pozos. Se estima que el proceso administrativo para el cierre de un pozo ilegal puede llegar a durar entre 7 y 8 años, tiempo durante cual la extracción de agua suele continuar. A esto se añade la dificultad física de clausurar los pozos, a veces acompañada por amenazas y agresiones físicas por parte de los afectados. Entre los casos más conocidos es la retención de un agente de la CHG por parte de agricultores y vecinos de Lucena del Puerto en el año 2018 mientras desempeñaba labores de inspección. ',
-        media: '13_ExtracciónPozoIlegalLucena'
+        media: '13_ExtracciónPozoIlegalLucena',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -225,7 +239,9 @@ const geojson = {
       properties: {
         title: 'Reconstrucción de chabolas en el asentamiento de trabajadorxs migrantes "Los Malienses" en Lucena del Puerto tras un incendio',
         description: 'Según recoge Andalucía Acoge, en 2021 en Lucena del Puerto, un municipio de poco más de 3000 personas, había 15 asentamientos con una población total de más de 400 personas. La mayoría de las personas provienen de Marruecos y Rumanía, dos de los principales países exportadores de mano de obra para el cultivo de frutos rojos. Los incendios son habituales en los asentamientos, resultado de la construcción con materiales altamente inflamables (plásticos, cartones, palés); la situación se ve agravada por las temperaturas extremas y la sequía. En mayo de 2021, en el asentamiento El Bosque, Ato y Essaadia murieron en un incendio que se propagó mientras dormían. La falta de alternativa habitacional hace que tras un incendio las chabolas se vuelvan a reconstruir, muchas veces en peores condiciones y aún mas hacinamiento. Entre las acciones del ayuntamiento de Lucena del Puerto figuran el corte del suministro de agua potable de la fuente más cercana al asentamiento El Bosque y el desmantelamiento de las placas solares donadas por colectivos solidarios con trabajadorxs migrantes. Lucena del Puerto es el pueblo del Condado de Huelva con la mayor concentración de agricultores en situación de irregularidad administrativa. Los ayuntamientos de la zona han negado activamente el empadronamiento de estas personas en numerosas ocasiones.',
-        media: '14_IncendioAsentamientoMaliensesLucena'
+        media: '14_IncendioAsentamientoMaliensesLucena',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -237,7 +253,9 @@ const geojson = {
       properties: {
         title: 'Asentamiento de trabajadorxs migrantes del Polígono San Jorge en Palos de la Frontera',
         description: 'Según el Grupo de Emergencias de Andalucía (GREA), en 2021 se identificaron en Huelva un total de 41 asentamientos. El más grande de ellos, conocido también como Baldifresa, se encuentra en el polígono San Jorge de Palos de la Frontera, con una ocupación estimada de 850 personas. Las dificultades de acceso a vivienda quedan reflejadas en que un 40% de las personas residentes allí esta en situación administrativa regular, poniendo así en duda el argumento de que la irregularidad laboral es la que impide el acceso de las trabajadores a la vivienda.  Estas personas sufren con regularidad  incendios devastadores y han tenido que enfrentarse también al acoso por las autoridades locales de Palos de la Frontera. Al margen de su falta de actuación para ofrecer una alternativa habitacional, las autoridades locales han aprovechado los incendios para impedir la reconstrucción de las chabolas agravando así la crisis habitacional que afecta a muchos trabajadores agrícolas. En la noche del 24 de septiembre de 2023 un incendio arrasó gran parte del asentamiento.',
-        media: '15_IncendioAsentamientoSanJorge'
+        media: '15_IncendioAsentamientoSanJorge',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -249,7 +267,9 @@ const geojson = {
       properties: {
         title: 'Invernaderos de fresas junto al Polo Químico de Promoción y Desarrollo de Huelva',
         description: 'La competencia entre usos industriales y agrícolas esta inscrita en el paisaje. Al este del casco urbano de Huelva se ubica un conjunto conocido como  “Polo Químico de Huelva”. El actual conjunto industrial incorpora infraestructuras ligadas a la industria química y petroquímica (refinería de petróleo, planta regasificadora de gas natural, biocombustibles, fundición de cobre, etc). Su creación se remite a la primera mitad de los años 60, cuando solo unos años antes de la declaración del Parque Nacional de Doñana el gobierno franquista decidió la construcción de un polo de promoción industrial en la zona. Las instalaciones se extienden hasta Palos de la Frontera, municipio pionero en el cultivo de la fresa. La situación de los cultivos e invernaderos de fresas a escasos metros de las instalaciones industriales hace que las trabajadoras alojadas en las fincas padezcan no solo las enfermedades asociadas al trabajo agrícola sino también sean las principales receptoras de las emisiones y ruidos de las industrias cercanas.',
-        media: '16_InvernaderosPoloQuímico'
+        media: '16_InvernaderosPoloQuímico',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -261,7 +281,9 @@ const geojson = {
       properties: {
         title: 'Aspersores riegan previamente al "enlomado" de campos junto al junto al Polo Químico',
         description: 'El núcleo irradiante del cultivo de fresa en la provincia de Huelva son los pueblos de Palos y Moguer. El ciclo de la fresa se inicia en junio-julio con la preparación del suelo y finaliza a principio del verano con las últimas cosechas. Las plantas provenientes de viveros en altura se cultivan en régimen intensivo  sobre lomos con dos filas de plantas y protegidos por láminas plásticas opacas que sirven de alcochado. El riego localizado y el cultivo bajo cubierta plástica son atributos definitorios del sistema de producción. Las tareas de recolección se suelen iniciar en el mes de enero y finalizan a principios de junio. La recolección concentra la mayor parte del trabajo absorbido por los cultivos de berries. Sin embargo, los trabajadores asalariados también desempeñan otras tareas durante el ciclo productivo. La exposición laboral a agroquímicos a través de la inyección de fumigantes y la aplicación de tratamientos fitosanitarios conlleva asociado un mayor riesgo de sufrir distintos tipos de cánceres, enfermedades respiratorias y cardiovasculares. Entre los berries, la primera y más conocida es la fresa, pero la búsqueda de alta rentabilidad ha resultado en un proceso de diversificación, llevando al sector agrícola onubense a liderar el cultivo de otros berries como el arándano y la frambuesa. ',
-        media: '17_AspersorAlomadoFresas'
+        media: '17_AspersorAlomadoFresas',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -273,7 +295,9 @@ const geojson = {
       properties: {
         title: 'Captación de agua para potabilización en Matalascañas',
         description: 'Desde la fundación del Espacio Portegido, el desarrollo urbano con fines turísticos ha sido una fuente de presión constante sobre los recursos hídricos del entorno. La creación del Centro de Interés Turístico Nacional de Matalascañas, perteneciente al termino municipal de Almonte, se remite a la segunda mitad de los años 60. La urbanización recibe más de 150,000 turistas al año y dos de los cinco sondeos que alimentan de agua Matalascañas estaban situados hasta hace poco a menos de un kilómetro de algunas de las grandes lagunas de Doñana. Según estudios del CSIC, los pozos de abastecimiento de Matalascañas han contribuido directamente a la desecación de las lagunas más próximas. Los episodios de desarrollo urbanístico especulativo son recurrentes en la zona: en los años 90 el proyecto “Costa Doñana” pretendía desarrollar al lado de Matalascañas un complejo turístico de más de 30,000 plazas. En ese momento fue la movilización social a través de la plataforma "Salvemos Doñana" la que consiguió la paralización de dicho plan.',
-        media: '18_CaptaciónMatalascañas'
+        media: '18_CaptaciónMatalascañas',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -285,7 +309,9 @@ const geojson = {
       properties: {
         title: 'Depuradora de Matalascañas',
         description: 'En 2018 el Tribunal de Justicia de la Union Europea sancionó a España por incumplir con la normativa sobre saneamiento de aguas urbanas. Matalascañas es uno de los tres municipios andaluces sancionados por incorrecta depuración de aguas residuales (de un total de 9 a nivel nacional). Mientras que la situación no este resuelta, la multa inicial, de 12 millones de euros, asciende por sanciones semestrales. En el año 2023 la multa superaba los 60 millones de euros. Las exigencias sobre tratamientos tenían que cumplirse a finales del año 2000 y España ya recibió una primera sanción en el año 2011. La finalización del proyecto de ampliación de la EDAR de Matalascañas está prevista para 2027. Mientras tanto, los vertidos de aguas fecales en la localidad siguen siendo recurrentes a excasos metros de las playas dentro del Parque Nacional.',
-        media: '19_DepuradoraMatalascañas'
+        media: '19_DepuradoraMatalascañas',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -297,7 +323,9 @@ const geojson = {
       properties: {
         title: 'Concentración de la Plataforma en Defensa de los Regadíos del Condado',
         description: 'Integrada por agentes cuyos intereses están vinculados a la producción de berries, entre ellos empresas agroindustriales, sindicatos y ayuntamientos, la Plataforma en Defensa de los Regadíos del Condado representa la estructura más visible del lobby de los regantes en la provincia de Huelva. La principal demanda de la Plataforma es la llegada del agua superficial a la zona del Condado de Huelva, lo cual se traduce concretamente en el apoyo al trasvase Tinto-Guadalquivir y a obras hidráulicas como la presa de Alcolea. En 2022 la pretensión de la Plataforma de conformar un frente unitario de los agricultores se vio mermada por el abandono de esta de más de 300 empresarios agrícolas de Almonte a raíz del proceso de ampliación del regadío iniciado a través de una iniciativa legislativa apoyada por PP, VOX y Ciudadanos. La mayoría de los agricultores de Almonte se oponen a la modificación del marco legal conformado por el “Plan Especial de Ordenación de las zonas de Regadíos ubicadas al norte de la Corona Forestal de Doñana” y la cesión de derechos de regadío a agricultores que incumplen los criterios establecidos en su marco.',
-        media: '21_ConcentraciónRegantesCondado'
+        media: '21_ConcentraciónRegantesCondado',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -309,7 +337,9 @@ const geojson = {
       properties: {
         title: 'Concentración de la plataforma Salvemos Doñana frente al Parlamento de Andalucía',
         description: '"La plataforma “Salvemos Doñana” integra a colectivos, organizaciones e individualidades coordinadas para la defensa del Espacio Natural Doñana y recientemente ha encabezado la oposición a la propuesta de ampliación de regadíos de PP y VOX. La asociación de la defensa del área protegida con la coordinación bajo este nombre se remite al año 1990 y la firma de un manifiesto en contra el macroproyecto urbanístico “Costa Doñana” titulado “Salvemos Doñana”. La reactivación de la coordinadora ocurre en el año 2016 en respuesta al proyecto de almacenamiento de Gas Natural en Doñana. El proyecto de extracción y posterior inyección de gas que pretendía acometer Gas Natural Fenosa buscaba convertir el subsuelo del parque en un almacén de gas. Mientras que actualmente se encuentra parado, el proyecto gasístico que pretendía almacenar un tercio del gas consumido en España no deja de ser una amenaza. En diciembre de 2022 el Gobierno autorizó la venta de los derechos de explotación y almacenamiento por parte de Gas Natural Almacenamientos Andalucía y Petroleum Oil Gas España a Trinity Capital, una sociedad mercantil constituida en Madrid con apenas un año de existencia. ',
-        media: '22_ConcentraciónSalvemosDoñana'
+        media: '22_ConcentraciónSalvemosDoñana',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -321,7 +351,9 @@ const geojson = {
       properties: {
         title: 'Canal de riego (seco) junto a los arrozales de Isla Mayor',
         description: 'La escasez hídrica mediada por la larga sequía de 2023 se hace palpable en los arrozales del bajo Guadalquivir, a las puertas de Doñana. Esta campaña los campos de Isla Mayor han dejado atrás su estampa verde y el sonido de las aves que se refugiaban cada verano en este oasis que suponen los arrozales inundados. No corre agua por los canales de distribución sobre los que se asienta una capa de tierra agrietada y polvo. Alrededor de 35.000 hectáreas han sido dejadas en barbecho ante el recorte en la dotación agua. Los 45 hectómetros cúbicos que concedió la Confederación Hidrográfica del Guadalquivir a los agricultores del arroz, en torno a un 12% de la dotación habitual, fueron finalmente vendidos a regantes de Sevilla, Córdoba, Jaén y Almería. Esta supone la primera venta masiva de derechos de agua en Andalucía.',
-        media: '23_ArrozalesIslaMayor'
+        media: '23_ArrozalesIslaMayor',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -333,7 +365,9 @@ const geojson = {
       properties: {
         title: 'Vado del Quema',
         description: 'El Vado del Quema es el paso natural del cauce del río Guadiamar utilizado en la peregrinación hacia la romería de la Virgen del Rocío. En sus aguas se realiza el ritual del bautismo de los romeros que llegan con sus hermandades por primera vez. En 2023 se desató la alarma en las semanas previas a la romería ante el cauce totalmente seco síntoma de la aguda sequía. Esto llevó a la delegación del Gobierno de la Junta de Andalucía en Sevilla a proponer un desembalse extraordinario a la Confederación Hidrográfica del Guadalquivir, propuesta que finalmente esta última institución descartó. Finalmente, las lluvias de los días previos a la romería posibilitaron la formación de charcos en la zona que sirvieron para bautizar a los peregrinos noveles. Semanas después, peregrinos que se desplazan hacia el “Rocío Chico” pasan el Vado del Quema totalmente seco envueltos en una nube de polvo.',
-        media: '24_VadodelQuema'
+        media: '24_VadodelQuema',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -345,7 +379,9 @@ const geojson = {
       properties: {
         title: 'Balsa de relaves mineros de Aznalcóllar',
         description: 'La madrugada del 25 de abril de 1998 se produjo la rotura de la balsa de lodos en la mina de Aznalcóllar, explotada por la empresa sueca Boliden. Tras la rotura, 6 millones de metros cúbicos de lodos tóxicos vertidos avanzaron a través del cauce del río Guadiamar (entrada natural de agua superficial a Doñana) hasta quedar a las puertas del Parque Nacional y el Parque Natural de Doñana afectando de 4.600 hectáreas. Años antes,  Manuel Aguilar Campos, ex-jefe de carga y descarga de la mina, alertó de la posible rotura siendo ignorado por la propia mina e instituciones. La Junta y el Estado han asumido gran parte de la restauración ambiental de las zonas afectadas. Actualmente la mina se encuentra en proceso de tramitación de los permisos para la reapertura y explotación subterránea de la corta de Los Frailes por parte de la empresa Minera los Frailes (98% Grupo México + 2% Grupo Magtel). No obstante, el proceso de adjudicación se encuentra judicializado y 16 personas procesadas serán juzgadas en 2025 por presuntos delitos de tráfico de influencias, prevaricación, malversación, fraude, negociación ilegal y prevaricación.',
-        media: '25_BalsaRelavesAznalcóllar'
+        media: '25_BalsaRelavesAznalcóllar',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -357,7 +393,9 @@ const geojson = {
       properties: {
         title: 'Reserva Natural Concertada Dehesa de Abajo',
         description: 'Perteneciente al término municipal de La Puebla del Río e integrada en el Espacio Natural de Doñana, La Reserva Natural Concertada Dehesa de Abajo está situada en la zona de contacto entre la comarca del Aljarafe y las marismas del Guadalquivir. La reserva de propiedad municipal se encuentra a escasos kilómetros del Brazo de la Torre, uno de los cauces deteriorados que alimentaban las marismas del Guadalquivir y cuya restauración, a pesar de su provisión por varios planes y el Real Decreto Ley 7/1999R, sigue sin ejecutarse.  Las modificaciones de cauces y la derivación de aguas mediante canales a través de más de un siglo, sobre todo con fines agrícolas, ha alterado drásticamente el funcionamiento hidrológico y la extensión de las marismas. Los proyectos de restauración buscan revertir los efectos de las intervenciones productivistas sobre las marismas con el fin de recuperar parte de su anterior funcionalidad hídrica y ecológica.',
-        media: '26_DehesadeAbajo'
+        media: '26_DehesadeAbajo',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
     {
@@ -369,7 +407,9 @@ const geojson = {
       properties: {
         title: 'Pocito del Rocío',
         description: 'En la plaza principal de la Aldea del Rocío se encuentra un pozo de agua dulce que se alimenta de las aguas subterráneas del acuífero de Doñana. El “Pocito del Rocío” fue durante mucho tiempo la única fuente de agua potable de la aldea y cumplía la función de alimentar a los peregrinos que acudían a la romería del Rocío. Durante la sequía de 2023 el "pocito" es el último vestigio de agua en la aldea. Justo en frente en el límite con el Parque Nacional de Doñana, corzos, ciervos y caballos buscan algún reducto de agua en una laguna totalmente seca. Al igual que esta laguna, que acostumbra a servir de refugio para aves acuáticas en la época estival, los arroyos y caños que llevan el agua a las marismas al interior del Parque Nacional yacen secos.',
-        media: '28_PocitoDelRocío'
+        media: '28_PocitoDelRocío',
+        audioFormat: 'wav',
+        imageFormat: 'png'
       }
     },
   ]
@@ -382,23 +422,42 @@ for (const feature of geojson.features) {
   el.className = 'marker';
 
   // make a marker for each feature and add to the map
-  new mapboxgl.Marker(el)
-  .setLngLat(feature.geometry.coordinates)
-  .setPopup(
-    new mapboxgl.Popup({ offset: 25 }) // add popups
-      .setHTML(
-        `<img src="assets/img/${feature.properties.media}.png" alt="${feature.properties.media}"><audio controls autoplay>
-  <source src="assets/audio/${feature.properties.media}.wav" type="audio/wav">
-  Your browser does not support the audio element.
-</audio><h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
-      )
-  )
-  .addTo(map);
+  if(feature.properties.imageFormat!='mp4') {
+    new mapboxgl.Marker(el)
+    .setLngLat(feature.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 }) // add popups
+        .setHTML(
+          `<img src="assets/img/${feature.properties.media}.${feature.properties.imageFormat}" alt="${feature.properties.media}">
+          <figcaption>Audio e imagen: Lucas Barrero</figcaption>
+          <audio controls autoplay>
+            <source src="assets/audio/${feature.properties.media}.${feature.properties.audioFormat}" type="audio/${feature.properties.audioFormat}">
+            Your browser does not support the audio element.
+          </audio><h3>${feature.properties.title}</h3>
+          <p>${feature.properties.description}</p>`
+        )
+    )
+    .addTo(map);
+  } else {
+    new mapboxgl.Marker(el)
+    .setLngLat(feature.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 }) // add popups
+        .setHTML(
+          `<video width="320" height="240" controls>
+            <source src="assets/video/${feature.properties.media}.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <figcaption>Audio e imagen: Lucas Barrero</figcaption>
+          <h3>${feature.properties.title}</h3>
+          <p>${feature.properties.description}</p>`
+        )
+    )
+    .addTo(map);
+  }
 }
 
 </script>
-
-<img src="" alt="">
 
 </body>
 </html>

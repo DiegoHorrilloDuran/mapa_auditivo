@@ -1,0 +1,5 @@
+Al crear la cuenta en mapbox, necesitamos generar un token y usarlo en 'mapboxgl.accessToken' dentro de index.html.
+
+En https://studio.mapbox.com/tilesets subiremos el mapa georeferenciado. Dentro de la imagen entramos en 'Share and use'
+y copiamos el 'Tileset ID'.
+En el html buscamos la linea donde aparece " map.addSource('donnana' " y en 'url' escribimos mapbox:// y el 'Tileset ID'
