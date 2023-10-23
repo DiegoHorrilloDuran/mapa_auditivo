@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
     <meta charset='utf-8' />
-    <title>Mapa sonoro</title>
+    <title>Ecos de Doñana: cartografia sonora de un conflicto socio-ecologico</title>
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
@@ -30,7 +30,7 @@
 <div id="drop_menu" style="display: none;">
   <p>Desde su nacimiento en 1969, el Parque Nacional de Doñana ha estado inmerso en una dinámica conflictiva. Este Espacio Natural limita con la región exportadora de frutos rojos más importante de Europa. El éxito y expansión de este modelo agroindustrial ha sido posible gracias a la extracción continua de aguas subterráneas y la explotación de la mano de obra inmigrante.
     <br><br>
-    <b>XXXXX</b> explora el paisaje sonoro del sistema socioecológico de Doñana. El mapa combina elementos visuales y acústicos con el objetivo de ofrecer una representación holística de la región más allá de las interpretaciones hegemónicas del territorio.
+    <b>Ecos de Doñana: cartografia sonora de un conflicto socio-ecologico</b> explora el paisaje sonoro del sistema socioecológico de Doñana. El mapa combina elementos visuales y acústicos con el objetivo de ofrecer una representación holística de la región más allá de las interpretaciones hegemónicas del territorio.
   </p>
   <hr>
   <p>Idea original: Lucas Barrero y Natalia Buier.<br>
@@ -60,22 +60,22 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibGJhcnJlcm8iLCJhIjoiY2xpajE3bjl1MDNwMTNxa2ozY
 
 // Set bounds.
 const bounds = [
-[-7.7,36.71], // Southwest coordinates
-[-5.81,37.79] // Northeast coordinates
+[-8.65,36.17], // Southwest coordinates
+[-4.86,38.33] // Northeast coordinates
 ];
 
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/outdoors-v12',
-  center: [-6.802986271762013, 37.27843511374113],
-  zoom: 9.4,
+  center: [-6.75884, 37.25],
+  zoom: 8.98,
   maxBounds: bounds // Set the map's geographical boundaries.
 });
 
 map.on('load', () => {
   map.addSource('donnana', {
     'type': 'raster',
-    'url': 'mapbox://lbarrero.12ebzzbc'
+    'url': 'mapbox://lbarrero.4fg3zt5n'
   });
   
   map.addLayer({

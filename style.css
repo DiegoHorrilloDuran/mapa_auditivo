@@ -92,8 +92,19 @@ body {
     width: 400px;
     background-color: #ede6d8;
     left: 0px;
-    padding: 15px;
     box-shadow: 0px 0px 5px 1px;
+}
+
+#drop_menu p {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#drop_menu hr {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 #legend img {
