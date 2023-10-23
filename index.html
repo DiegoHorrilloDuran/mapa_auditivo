@@ -68,8 +68,9 @@ const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/outdoors-v12',
   center: [-6.75884, 37.25],
+  maxBounds: bounds, // Set the map's geographical boundaries.
   zoom: 8.98,
-  maxBounds: bounds // Set the map's geographical boundaries.
+  minZoom: 8.98
 });
 
 map.on('load', () => {
@@ -84,6 +85,16 @@ map.on('load', () => {
     'type': 'raster'
   });
 });
+
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+
+
+// disable map rotation using right click + drag
+map.dragRotate.disable();
+ 
+// disable map rotation using touch rotation gesture
+map.touchZoomRotate.disableRotation();
 
 // Marcadores para el mapa
 const geojson = {
