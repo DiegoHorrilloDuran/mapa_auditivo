@@ -11,11 +11,52 @@
 </head>
 <body>
 
-<div id='map'></div>
+<div id='map'>
+  <div class="bottom-left-menu">
+    <button class="drop_btn" onclick='toggleBtn("drop_menu")'>
+      <img class="btn_img" src="assets\botón_gota.png">
+    </button>
+    <button class="legend_btn" onclick='toggleBtn("legend")'>
+      <img class="btn_img" src="assets/botón_leyenda.png">
+    </button>
+    <button class="mapamundi_btn" onclick='toggleBtn("mapamundi")'>
+      <img class="btn_img" src="assets/botón_mapamundi.png">
+    </button>
+  </div>
+</div>
+
+<div id="overlay_shadow" onclick='toggleAllBtns(["drop_menu","legend","mapamundi"])' style="display: none;"></div>
+
+<div id="drop_menu" style="display: none;">
+  <p>Desde su nacimiento en 1969, el Parque Nacional de Doñana ha estado inmerso en una dinámica conflictiva. Este Espacio Natural limita con la región exportadora de frutos rojos más importante de Europa. El éxito y expansión de este modelo agroindustrial ha sido posible gracias a la extracción continua de aguas subterráneas y la explotación de la mano de obra inmigrante.
+    <br><br>
+    <b>XXXXX</b> explora el paisaje sonoro del sistema socioecológico de Doñana. El mapa combina elementos visuales y acústicos con el objetivo de ofrecer una representación holística de la región más allá de las interpretaciones hegemónicas del territorio.
+  </p>
+  <hr>
+  <p>Idea original: Lucas Barrero y Natalia Buier.<br>
+    Ilustración: Lucía Valdés.<br>
+    Grabaciones: Lucas Barrero, La Mar de Onuba, Pepa Suárez.<br>
+    Fotografías: Lucas Barrero, Pepa Suárez.<br>
+    Programación: Diego Horrillo.
+  </p>
+  <hr>
+  <p>Este mapa sonoro ha sido posible gracias a la financiación recibida a través del proyecto Marie Sklodowska-Curie (nº 890611, H2020-MSCA-IF-2019).</p>
+  <button class="close" onclick='toggleBtn("drop_menu")'><b>x</b></button>
+</div>
+
+<div id="legend" style="display: none;">
+  <img src="assets/leyenda.png">
+  <button class="close" onclick='toggleBtn("legend")'><b>x</b></button>
+</div>
+
+<div id="mapamundi" style="display: none;">
+  <img src="assets/mapamundi.png">
+  <button class="close" onclick='toggleBtn("mapamundi")'><b>x</b></button>
+</div>
 
 <script>
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiZGllZ29ob3JyaWxsb2QiLCJhIjoiY2xranlxd2hoMDV6MDNlbnM2ZmFydjRidSJ9.xkqmAQY_sZTZhgWC91go1A';
+mapboxgl.accessToken = 'pk.eyJ1IjoibGJhcnJlcm8iLCJhIjoiY2xpajE3bjl1MDNwMTNxa2ozYjF5Y3V3biJ9.us1DckXJj--UgEAzwnvzvA';
 
 // Set bounds.
 const bounds = [
@@ -34,7 +75,7 @@ const map = new mapboxgl.Map({
 map.on('load', () => {
   map.addSource('donnana', {
     'type': 'raster',
-    'url': 'mapbox://diegohorrillod.2dccre6e'
+    'url': 'mapbox://lbarrero.12ebzzbc'
   });
   
   map.addLayer({
@@ -428,8 +469,7 @@ for (const feature of geojson.features) {
     .setPopup(
       new mapboxgl.Popup({ offset: 25 }) // add popups
         .setHTML(
-          `<img src="assets/img/${feature.properties.media}.${feature.properties.imageFormat}" alt="${feature.properties.media}">
-          <figcaption>Audio e imagen: Lucas Barrero</figcaption>
+          `<img class="card-img" src="assets/img/${feature.properties.media}.${feature.properties.imageFormat}" alt="${feature.properties.media}">
           <audio controls autoplay>
             <source src="assets/audio/${feature.properties.media}.${feature.properties.audioFormat}" type="audio/${feature.properties.audioFormat}">
             Your browser does not support the audio element.
@@ -448,7 +488,6 @@ for (const feature of geojson.features) {
             <source src="assets/video/${feature.properties.media}.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
-          <figcaption>Audio e imagen: Lucas Barrero</figcaption>
           <h3>${feature.properties.title}</h3>
           <p>${feature.properties.description}</p>`
         )
@@ -458,6 +497,26 @@ for (const feature of geojson.features) {
 }
 
 </script>
+
+<script>
+  function toggleBtn(id) {
+    let display = document.getElementById(id).style.display
+    if(display == "none") {
+        document.getElementById(id).style.display = "block"
+      document.getElementById("overlay_shadow").style.display = "block"
+    } else {
+      document.getElementById(id).style.display = "none"
+        document.getElementById("overlay_shadow").style.display = "none"
+    }
+  }
+
+  function toggleAllBtns(ids) {
+    for(const id of ids) {
+      document.getElementById(id).style.display = "none"
+    }
+    document.getElementById("overlay_shadow").style.display = "none"
+  }
+  </script>
 
 </body>
 </html>
